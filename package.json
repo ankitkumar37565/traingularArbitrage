@@ -1,0 +1,25 @@
+{
+  "name": "traingulararbitrage",
+  "version": "1.0.0",
+  "description": "Finding traingular arbitrage among all trading pairs",
+  "main": "arbitrage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankitkumar37565/traingularArbitrage.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ankitkumar37565/traingularArbitrage/issues"
+  },
+  "homepage": "https://github.com/ankitkumar37565/traingularArbitrage#readme",
+  "dependencies": {
+    "axios": "^1.3.2",
+    "timsort": "^0.3.0",
+    "ws": "^8.12.0"
+  }
+}
