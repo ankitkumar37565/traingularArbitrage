@@ -2,9 +2,8 @@
 
 const axios = require("axios");
 const Ws = require("ws");
-const Sort=require('timsort')
 const fs=require('fs')
-const arbPairs=require('./path')
+// const arbPairs=require('./path')
 // const eventEmitter=new (require('events'))()
 
 const binance_3pair_Arbitrage = {
@@ -134,10 +133,10 @@ const binance_3pair_Arbitrage = {
     });
     console.log('total Paths->',this.arbitragePairs.length)
     console.log('arbitrage routes calculation complete')
-    const writer=fs.createWriteStream('./path.js',{
-      highWaterMark:1024*1024
-    })
-    writer.write('let arbPairs='+JSON.stringify(this.arbitragePairs)+';module.exports=arbPairs')
+    // const writer=fs.createWriteStream('./path.js',{
+    //   highWaterMark:1024*1024
+    // })
+    // writer.write('let arbPairs='+JSON.stringify(this.arbitragePairs)+';module.exports=arbPairs')
 
     
   },
@@ -182,20 +181,17 @@ const binance_3pair_Arbitrage = {
             else{
                 _3pairs.arbitrage/=this.pairs[_3pairs.pair3]
             }
-            console.log(_3pairs.arbitrage)
             _3pairs.arbitrage=(_3pairs.arbitrage-1)*100
-            // console.log(_3pairs.pair1,this.pairs[_3pairs.pair1],_3pairs.pair2,this.pairs[_3pairs.pair2],_3pairs.pair3,this.pairs[_3pairs.pair3])
-
+            _3pairs.arbitrageWithFee=_3pairs.arbitrage-0.3
         }
       })
 
       // eventEmitter.emit('arbitrageUpdate')
-      Sort.sort(this.arbitragePairs,this.sortPercentageWise)``
+      this.arbitragePairs.sort((a,b)=> b.arbitrage-a.arbitrage)
       console.log('------------------------')
-      // console.log(this.arbitragePairs[0])
-      // console.log(this.arbitragePairs[1])
-      // console.log(this.arbitragePairs[2])
-      console.log(this.arbitragePairs)
+      console.log(this.arbitragePairs[0])
+      console.log(this.arbitragePairs[1])
+      console.log(this.arbitragePairs[2])
       console.log('------------------------')
       return
     } catch (e) {
@@ -204,14 +200,14 @@ const binance_3pair_Arbitrage = {
     }
   },
   sortPercentageWise:async function(a,b){
-    return (a.arbitrage-b.arbitrage)
+    return (a.arbitrage>b.arbitrage)
   }
 };
 
 binance_3pair_Arbitrage.getTradingPairs((res)=>{}).then(async()=>{
 // console.log(binance_3pair_Arbitrage.pairs)
 // console.log(binance_3pair_Arbitrage.assets)
-// await binance_3pair_Arbitrage.getArbitrageRoutes()
-binance_3pair_Arbitrage.arbitragePairs=arbPairs
+await binance_3pair_Arbitrage.getArbitrageRoutes()
+// binance_3pair_Arbitrage.arbitragePairs=arbPairs
 binance_3pair_Arbitrage.pricews()
 })
